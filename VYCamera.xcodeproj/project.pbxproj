@@ -8,12 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		F5C8F0CE2193B796001364D6 /* VYCamera.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C8F0CC2193B796001364D6 /* VYCamera.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F5C8F0FE2193BC71001364D6 /* VYCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5C8F0FD2193BC71001364D6 /* VYCamera.swift */; };
+		F5C8F1012193BD57001364D6 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5C8F0FF2193BD57001364D6 /* Helper.swift */; };
+		F5C8F1022193BD57001364D6 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5C8F1002193BD57001364D6 /* Device.swift */; };
+		F5C8F10621949C8E001364D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F5C8F10521949C8E001364D6 /* Assets.xcassets */; };
+		F5D0A9AE2194C4CD00D77D52 /* CaptureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D0A9AD2194C4CD00D77D52 /* CaptureButton.swift */; };
+		F5D0A9B72196150D00D77D52 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D0A9B62196150D00D77D52 /* Images.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		F5C8F0C92193B796001364D6 /* VYCamera.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VYCamera.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5C8F0CC2193B796001364D6 /* VYCamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VYCamera.h; sourceTree = "<group>"; };
 		F5C8F0CD2193B796001364D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F5C8F0FD2193BC71001364D6 /* VYCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VYCamera.swift; sourceTree = "<group>"; };
+		F5C8F0FF2193BD57001364D6 /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		F5C8F1002193BD57001364D6 /* Device.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
+		F5C8F10521949C8E001364D6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F5D0A9AD2194C4CD00D77D52 /* CaptureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureButton.swift; sourceTree = "<group>"; };
+		F5D0A9B62196150D00D77D52 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,10 +58,24 @@
 		F5C8F0CB2193B796001364D6 /* VYCamera */ = {
 			isa = PBXGroup;
 			children = (
+				F5C8F0FD2193BC71001364D6 /* VYCamera.swift */,
+				F5D0A9AD2194C4CD00D77D52 /* CaptureButton.swift */,
+				F5C8F10521949C8E001364D6 /* Assets.xcassets */,
 				F5C8F0CC2193B796001364D6 /* VYCamera.h */,
 				F5C8F0CD2193B796001364D6 /* Info.plist */,
+				F5C8F1032193BD5D001364D6 /* Helpers */,
 			);
 			path = VYCamera;
+			sourceTree = "<group>";
+		};
+		F5C8F1032193BD5D001364D6 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				F5C8F1002193BD57001364D6 /* Device.swift */,
+				F5C8F0FF2193BD57001364D6 /* Helper.swift */,
+				F5D0A9B62196150D00D77D52 /* Images.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -95,6 +121,7 @@
 				TargetAttributes = {
 					F5C8F0C82193B796001364D6 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1010;
 					};
 				};
 			};
@@ -120,6 +147,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5C8F10621949C8E001364D6 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,6 +158,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5C8F1022193BD57001364D6 /* Device.swift in Sources */,
+				F5C8F0FE2193BC71001364D6 /* VYCamera.swift in Sources */,
+				F5D0A9B72196150D00D77D52 /* Images.swift in Sources */,
+				F5D0A9AE2194C4CD00D77D52 /* CaptureButton.swift in Sources */,
+				F5C8F1012193BD57001364D6 /* Helper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +294,7 @@
 		F5C8F0D22193B796001364D6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -270,6 +304,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = VYCamera/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -278,6 +313,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.yakovlev.VYCamera;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -286,6 +322,7 @@
 		F5C8F0D32193B796001364D6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -295,6 +332,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = VYCamera/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
