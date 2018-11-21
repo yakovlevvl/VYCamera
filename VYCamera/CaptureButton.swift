@@ -37,6 +37,8 @@ final class CaptureButton: UIView {
     
     var videoCaptureDuration: CFTimeInterval = 60
     
+    var allowVideoRecording = true
+    
     weak var delegate: CaptureButtonDelegate?
     
     override var frame: CGRect {
@@ -69,6 +71,7 @@ final class CaptureButton: UIView {
     }
     
     @objc private func longPressRecognized(_ gesture: UILongPressGestureRecognizer) {
+        guard allowVideoRecording else { return }
         switch gesture.state {
         case .began :
 

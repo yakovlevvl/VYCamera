@@ -29,4 +29,8 @@ enum Images {
     static var flashAutoIcon: UIImage {
         return UIImage(named: "FlashAuto")!
     }
+    
+    static var pickerIcon: UIImage {
+        return UIImage(named: "PickerIcon")!
+    }
 }

@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import MobileCoreServices
 
 extension VYCamera {
     
@@ -26,9 +27,13 @@ extension VYCamera {
 
 public protocol VYCameraDelegate: class {
     
-    func didTake(photo: UIImage, error: Error?)
+    func camera(_ camera: VYCamera, didTake photo: UIImage, error: Error?)
     
-    func didFinishVideoRecordingTo(fileURL: URL, error: Error?)
+    func camera(_ camera: VYCamera, didFinishVideoRecordingTo fileURL: URL, error: Error?)
+    
+    func camera(_ camera: VYCamera, didTakeWithImagePicker photo: UIImage, error: Error?)
+    
+    func camera(_ camera: VYCamera, didTakeWithImagePicker videoUrl: URL, error: Error?)
     
     func didCloseByUser()
 }
@@ -57,6 +62,10 @@ public final class VYCamera: UIViewController {
     public var videoRecordingDuration: CFTimeInterval = 60
     
     public var closeButtonAlignment: ButtonAlignment = .left
+    
+    public var allowVideoRecording = true
+    
+    public var allowImagePicker = false
     
     
     public var closeButtonImage: UIImage? {
@@ -135,6 +144,15 @@ public final class VYCamera: UIViewController {
         return button
     }()
     
+    private lazy var pickerButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.frame.size = CGSize(width: 50, height: 50)
+        button.setImage(Images.pickerIcon)
+        button.contentMode = .center
+        button.tintColor = .white
+        return button
+    }()
+    
     public init() {
         super.init(nibName: nil, bundle: nil)
         setupCamera()
@@ -170,10 +188,15 @@ public final class VYCamera: UIViewController {
         view.addSubview(flashButton)
         view.addSubview(switchButton)
         view.addSubview(captureButton)
+        
+        if allowImagePicker {
+            view.addSubview(pickerButton)
+        }
 
         view.layer.insertSublayer(previewLayer, at: 0)
         
         captureButton.delegate = self
+        captureButton.allowVideoRecording = allowVideoRecording
         captureButton.borderColor = captureButtonColor
         captureButton.progressLineColor = videoRecordingProgressColor
         captureButton.videoCaptureDuration = videoRecordingDuration
@@ -181,6 +204,10 @@ public final class VYCamera: UIViewController {
         closeButton.addTarget(self, action: #selector(closeCamera), for: .touchUpInside)
         flashButton.addTarget(self, action: #selector(toggleFlash), for: .touchUpInside)
         switchButton.addTarget(self, action: #selector(switchCamera), for: .touchUpInside)
+        
+        if allowImagePicker {
+            pickerButton.addTarget(self, action: #selector(pickerButtonTapped), for: .touchUpInside)
+        }
         
         let focusGesture = UITapGestureRecognizer(target: self, action: #selector(focus(tap:)))
         focusGesture.delegate = self
@@ -194,12 +221,22 @@ public final class VYCamera: UIViewController {
         switch closeButtonAlignment {
         case .left :
             closeButton.frame.origin.x = currentDevice == .iPhoneX ? 16 : 14
+            if allowImagePicker {
+                pickerButton.frame.origin.x = view.frame.width - pickerButton.frame.width - (currentDevice == .iPhoneX ? 16 : 14)
+            }
         case .right :
             closeButton.frame.origin.x = view.frame.width - closeButton.frame.width - (currentDevice == .iPhoneX ? 16 : 14)
+            if allowImagePicker {
+                pickerButton.frame.origin.x = currentDevice == .iPhoneX ? 16 : 14
+            }
         case .center :
             closeButton.center.x = view.center.x
+            if allowImagePicker {
+                pickerButton.frame.origin.x = currentDevice == .iPhoneX ? 16 : 14
+            }
         }
         closeButton.frame.origin.y = currentDevice == .iPhoneX ? 40 : 14
+        pickerButton.frame.origin.y = currentDevice == .iPhoneX ? 40 : 14
         
         captureButton.center.x = view.center.x
         let captureButtonInset: CGFloat = currentDevice == .iPhoneX ? 36 : 24
@@ -212,6 +249,19 @@ public final class VYCamera: UIViewController {
         switchButton.center.y = captureButton.center.y
         
         previewLayer.frame = view.bounds
+    }
+    
+    @objc private func pickerButtonTapped() {
+        let pickerVC = UIImagePickerController()
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+            pickerVC.sourceType = .photoLibrary
+            if allowVideoRecording {
+                pickerVC.mediaTypes.append(kUTTypeMovie as String)
+                pickerVC.videoMaximumDuration = videoRecordingDuration
+            }
+            pickerVC.delegate = self
+            present(pickerVC, animated: true)
+        }
     }
     
     @objc private func closeCamera() {
@@ -332,7 +382,7 @@ extension VYCamera: AVCapturePhotoCaptureDelegate {
     public func photoOutput(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
         if let buffer = photoSampleBuffer {
             let photo = UIImage(data: AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: buffer, previewPhotoSampleBuffer: previewPhotoSampleBuffer)!)!
-            delegate?.didTake(photo: photo, error: error)
+            delegate?.camera(self, didTake: photo, error: error)
         }
     }
 }
@@ -340,7 +390,7 @@ extension VYCamera: AVCapturePhotoCaptureDelegate {
 extension VYCamera: AVCaptureFileOutputRecordingDelegate {
     
     public func fileOutput(_ captureOutput: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
-        delegate?.didFinishVideoRecordingTo(fileURL: outputFileURL, error: error)
+        delegate?.camera(self, didFinishVideoRecordingTo: outputFileURL, error: error)
     }
 }
 
@@ -356,6 +406,7 @@ extension VYCamera: CaptureButtonDelegate {
             self.flashButton.alpha = 0
             self.switchButton.alpha = 0
             self.closeButton.alpha = 0
+            self.pickerButton.alpha = 0
         }
     }
     
@@ -365,6 +416,21 @@ extension VYCamera: CaptureButtonDelegate {
             self.flashButton.alpha = 1
             self.switchButton.alpha = 1
             self.closeButton.alpha = 1
+            self.pickerButton.alpha = 1
+        }
+    }
+}
+
+extension VYCamera: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true)
+        if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            delegate?.camera(self, didTakeWithImagePicker: image, error: nil)
+        } else if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            delegate?.camera(self, didTakeWithImagePicker: image, error: nil)
+        } else if let videoUrl = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
+            delegate?.camera(self, didTakeWithImagePicker: videoUrl, error: nil)
         }
     }
 }

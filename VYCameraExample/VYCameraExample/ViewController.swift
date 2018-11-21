@@ -35,6 +35,7 @@ final class ViewController: UIViewController {
         view.addSubview(openButton)
         
         camera.delegate = self
+        camera.allowImagePicker = true
         
         openButton.center = view.center
         openButton.addTarget(self, action: #selector(openCamera), for: .touchUpInside)
@@ -59,15 +60,27 @@ final class ViewController: UIViewController {
 
 extension ViewController: VYCameraDelegate {
     
-    func didTake(photo: UIImage, error: Error?) {
+    func camera(_ camera: VYCamera, didTake photo: UIImage, error: Error?) {
         if error == nil {
             showPhotoPreview(photo)
         }
     }
     
-    func didFinishVideoRecordingTo(fileURL: URL, error: Error?) {
+    func camera(_ camera: VYCamera, didFinishVideoRecordingTo fileURL: URL, error: Error?) {
         if error == nil {
             showVideoPreview(fileURL)
+        }
+    }
+    
+    func camera(_ camera: VYCamera, didTakeWithImagePicker photo: UIImage, error: Error?) {
+        if error == nil {
+            showPhotoPreview(photo)
+        }
+    }
+    
+    func camera(_ camera: VYCamera, didTakeWithImagePicker videoUrl: URL, error: Error?) {
+        if error == nil {
+            showVideoPreview(videoUrl)
         }
     }
     
