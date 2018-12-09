@@ -38,6 +38,17 @@ public protocol VYCameraDelegate: class {
     func didCloseByUser()
 }
 
+public extension VYCameraDelegate {
+    
+    func camera(_ camera: VYCamera, didFinishVideoRecordingTo fileURL: URL, error: Error?) {}
+    
+    func camera(_ camera: VYCamera, didTakeWithImagePicker photo: UIImage, error: Error?) {}
+    
+    func camera(_ camera: VYCamera, didTakeWithImagePicker videoUrl: URL, error: Error?) {}
+    
+    func didCloseByUser() {}
+}
+
 public final class VYCamera: UIViewController {
     
     public weak var delegate: VYCameraDelegate?
